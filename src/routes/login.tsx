@@ -3,22 +3,20 @@ import { useState } from "react";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import signupHero from "@/assets/signup-hero.jpg";
 
-export const Route = createFileRoute("/signup")({
-  component: SignupPage,
+export const Route = createFileRoute("/login")({
+  component: LoginPage,
   head: () => ({
     meta: [
-      { title: "Sign Up — SalesGen" },
-      { name: "description", content: "Create your SalesGen account and join the next-gen affiliate ecosystem." },
+      { title: "Log In — SalesGen" },
+      { name: "description", content: "Log in to your SalesGen account and access the next-gen affiliate ecosystem." },
     ],
   }),
 });
 
-function SignupPage() {
+function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [agreed, setAgreed] = useState(false);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -46,14 +44,14 @@ function SignupPage() {
 
           <div className="relative z-10 pb-8">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground text-center leading-tight">
-              Redefining Affiliate
+              Welcome Back to
               <br />
-              Performance
+              the Ecosystem
             </h2>
             <div className="flex justify-center gap-2 mt-6">
-              <span className="w-6 h-1.5 rounded-full bg-muted-foreground/40" />
-              <span className="w-6 h-1.5 rounded-full bg-muted-foreground/40" />
               <span className="w-8 h-1.5 rounded-full bg-foreground" />
+              <span className="w-6 h-1.5 rounded-full bg-muted-foreground/40" />
+              <span className="w-6 h-1.5 rounded-full bg-muted-foreground/40" />
             </div>
           </div>
         </div>
@@ -61,12 +59,12 @@ function SignupPage() {
         {/* Right Panel - Form */}
         <div className="p-8 md:p-10 flex flex-col justify-center">
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">
-            Create an account
+            Welcome back
           </h1>
           <p className="text-muted-foreground text-sm mb-8">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:underline font-medium">
-              Log in
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary hover:underline font-medium">
+              Sign up
             </Link>
           </p>
 
@@ -76,17 +74,6 @@ function SignupPage() {
               e.preventDefault();
             }}
           >
-            <div className="grid grid-cols-2 gap-3">
-              <Input
-                placeholder="First name"
-                className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
-              />
-              <Input
-                placeholder="Last name"
-                className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
-              />
-            </div>
-
             <Input
               type="email"
               placeholder="Email"
@@ -108,32 +95,26 @@ function SignupPage() {
               </button>
             </div>
 
-            <div className="flex items-center gap-2 pt-1">
-              <Checkbox
-                id="terms"
-                checked={agreed}
-                onCheckedChange={(v) => setAgreed(v === true)}
-                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-              />
-              <label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
-                I agree to the{" "}
-                <span className="text-primary hover:underline cursor-pointer">
-                  Terms & Conditions
-                </span>
-              </label>
+            <div className="flex items-center justify-end">
+              <button
+                type="button"
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot password?
+              </button>
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground mt-2"
+              className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              Create account
+              Log in
             </Button>
           </form>
 
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">Or register with</span>
+            <span className="text-xs text-muted-foreground">Or continue with</span>
             <div className="flex-1 h-px bg-border" />
           </div>
 
