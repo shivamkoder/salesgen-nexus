@@ -43,7 +43,13 @@ export default function Navbar() {
         </div>
 
         {/* CTA */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="#"
+            className="inline-flex items-center gap-2 rounded-full border border-border/40 px-5 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-surface-light hover:border-primary/30"
+          >
+            Log in
+          </a>
           <a
             href="#cta"
             className="btn-glow inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all"
@@ -64,7 +70,8 @@ export default function Navbar() {
           <a href="#mission" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Mission</a>
           <a href="#infrastructure" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Infrastructure</a>
           <a href="#vision" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Vision</a>
-          <a href="#cta" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground mt-2">Get Started</a>
+          <a href="#" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full border border-border/40 px-6 py-3 font-medium text-foreground mt-2">Log in</a>
+          <a href="#cta" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground">Get Started</a>
         </div>
       )}
     </nav>

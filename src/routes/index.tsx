@@ -6,6 +6,7 @@ import InfrastructureSection from "@/components/InfrastructureSection";
 import VisionSection from "@/components/VisionSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
+import CursorGlow from "@/components/CursorGlow";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <CursorGlow />
       <Navbar />
       <HeroSection />
       <MissionSection />
