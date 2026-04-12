@@ -1,0 +1,47 @@
+{
+  "summary": "Completed comprehensive testing of affiliate dashboard and identified routing issues with signup pages. Dashboard works perfectly with all components, but signup routes have configuration problems.",
+  "backend_issues": {},
+  "frontend_issues": {
+    "routing_bugs": [
+      {
+        "component": "Signup Routes",
+        "issue": "Child routes /signup/client and /signup/affiliate render generic signup form instead of specific forms",
+        "root_cause": "Parent route /signup renders its own component instead of using <Outlet /> for child routes",
+        "affected_routes": ["/signup/client", "/signup/affiliate"],
+        "fix_priority": "HIGH"
+      }
+    ],
+    "ui_bugs": [],
+    "integration_issues": []
+  },
+  "passed_tests": [
+    "Affiliate dashboard loads successfully at /dashboard/affiliate",
+    "Header shows 'Affiliate Lab' title with menu and profile buttons",
+    "Available Balance card displays $12,450.00 with 12.4% revenue increase",
+    "Request Payout button is visible and clickable",
+    "Last Payout shows $2,100.00 (Oct 12)",
+    "Payout Schedule card shows Oct 28 date and $840.50 pending clearance with orange accent",
+    "Weekly Conversion Trend bar chart renders with 7 bars (MON-SUN) using recharts",
+    "High-Yield Campaigns section shows Aura Design with FEATURED badge and CloudSync Pro",
+    "Promote buttons exist and are clickable on campaign cards",
+    "View all campaigns link is visible and clickable",
+    "Priority Support card with Chat Now button is visible and clickable",
+    "Platform Updates section shows 3 update items with timestamps",
+    "Bottom navigation bar with HOME, CAMPAIGNS, PAYOUTS, SUPPORT tabs works correctly",
+    "Navigation tabs switch active state on click",
+    "Floating action button (FAB) is visible and clickable with correct positioning",
+    "Homepage CTA buttons link correctly to signup pages",
+    "Apply for Scale button links to /signup/affiliate",
+    "Hire for Scale button links to /signup/client"
+  ],
+  "test_report_links": [],
+  "success_percentage": {
+    "frontend": "85%",
+    "dashboard": "100%",
+    "routing": "60%"
+  },
+  "updated_files": [],
+  "action_item_for_main_agent": "Fix routing configuration: The /signup route should use <Outlet /> instead of rendering its own component, or restructure routes so /signup/client and /signup/affiliate are independent routes not nested under /signup. The specific client and affiliate signup components exist but are not being rendered due to routing issues.",
+  "should_call_test_agent_after_fix": "true",
+  "should_main_agent_test_itself": "false"
+}

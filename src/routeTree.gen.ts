@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignupClientRouteImport } from './routes/signup/client'
 import { Route as SignupAffiliateRouteImport } from './routes/signup/affiliate'
+import { Route as DashboardAffiliateRouteImport } from './routes/dashboard/affiliate'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -40,11 +41,17 @@ const SignupAffiliateRoute = SignupAffiliateRouteImport.update({
   path: '/affiliate',
   getParentRoute: () => SignupRoute,
 } as any)
+const DashboardAffiliateRoute = DashboardAffiliateRouteImport.update({
+  id: '/dashboard/affiliate',
+  path: '/dashboard/affiliate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRouteWithChildren
+  '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRouteWithChildren
+  '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
 }
@@ -60,19 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRouteWithChildren
+  '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signup' | '/signup/affiliate' | '/signup/client'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard/affiliate'
+    | '/signup/affiliate'
+    | '/signup/client'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup' | '/signup/affiliate' | '/signup/client'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard/affiliate'
+    | '/signup/affiliate'
+    | '/signup/client'
   id:
     | '__root__'
     | '/'
     | '/login'
     | '/signup'
+    | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
   fileRoutesById: FileRoutesById
@@ -81,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRouteWithChildren
+  DashboardAffiliateRoute: typeof DashboardAffiliateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -120,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupAffiliateRouteImport
       parentRoute: typeof SignupRoute
     }
+    '/dashboard/affiliate': {
+      id: '/dashboard/affiliate'
+      path: '/dashboard/affiliate'
+      fullPath: '/dashboard/affiliate'
+      preLoaderRoute: typeof DashboardAffiliateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -140,6 +170,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRouteWithChildren,
+  DashboardAffiliateRoute: DashboardAffiliateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
