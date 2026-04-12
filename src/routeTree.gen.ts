@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as SignupClientRouteImport } from './routes/signup/client'
 import { Route as SignupAffiliateRouteImport } from './routes/signup/affiliate'
 import { Route as DashboardAffiliateRouteImport } from './routes/dashboard/affiliate'
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SignupIndexRoute = SignupIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SignupRoute,
 } as any)
 const SignupClientRoute = SignupClientRouteImport.update({
   id: '/client',
@@ -54,14 +60,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
+  '/signup/': typeof SignupIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/signup': typeof SignupRouteWithChildren
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
+  '/signup': typeof SignupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +78,7 @@ export interface FileRoutesById {
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
+  '/signup/': typeof SignupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,14 +89,15 @@ export interface FileRouteTypes {
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
+    | '/signup/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/signup'
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
+    | '/signup'
   id:
     | '__root__'
     | '/'
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
+    | '/signup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup/': {
+      id: '/signup/'
+      path: '/'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof SignupIndexRouteImport
+      parentRoute: typeof SignupRoute
+    }
     '/signup/client': {
       id: '/signup/client'
       path: '/client'
@@ -156,11 +173,13 @@ declare module '@tanstack/react-router' {
 interface SignupRouteChildren {
   SignupAffiliateRoute: typeof SignupAffiliateRoute
   SignupClientRoute: typeof SignupClientRoute
+  SignupIndexRoute: typeof SignupIndexRoute
 }
 
 const SignupRouteChildren: SignupRouteChildren = {
   SignupAffiliateRoute: SignupAffiliateRoute,
   SignupClientRoute: SignupClientRoute,
+  SignupIndexRoute: SignupIndexRoute,
 }
 
 const SignupRouteWithChildren =
