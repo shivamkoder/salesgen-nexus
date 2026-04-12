@@ -1,4 +1,5 @@
 import { ArrowRight, Building2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 export default function CtaSection() {
@@ -26,18 +27,18 @@ export default function CtaSection() {
         </p>
 
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#"
+          <Link
+            to="/signup/affiliate"
             className="btn-glow inline-flex items-center gap-2 rounded-full bg-primary px-9 py-4 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_40px_oklch(0.78_0.08_260_/_35%)]"
           >
             Apply for Scale <ArrowRight size={16} />
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/signup/client"
             className="inline-flex items-center gap-2 rounded-full glass glow-border px-9 py-4 text-sm font-semibold text-foreground transition-all duration-300 glow-border-hover"
           >
             <Building2 size={16} /> Hire for Scale
-          </a>
+          </Link>
         </div>
       </div>
     </section>

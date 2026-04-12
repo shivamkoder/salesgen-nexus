@@ -9,15 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignupLayoutRouteImport } from './routes/signup.layout'
+import { Route as SignupClientRouteImport } from './routes/signup/client'
+import { Route as SignupAffiliateRouteImport } from './routes/signup/affiliate'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -28,46 +25,73 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupLayoutRoute = SignupLayoutRouteImport.update({
+  id: '/signup/layout',
+  path: '/signup/layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupClientRoute = SignupClientRouteImport.update({
+  id: '/signup/client',
+  path: '/signup/client',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupAffiliateRoute = SignupAffiliateRouteImport.update({
+  id: '/signup/affiliate',
+  path: '/signup/affiliate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
+  '/signup/affiliate': typeof SignupAffiliateRoute
+  '/signup/client': typeof SignupClientRoute
+  '/signup/layout': typeof SignupLayoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
+  '/signup/affiliate': typeof SignupAffiliateRoute
+  '/signup/client': typeof SignupClientRoute
+  '/signup/layout': typeof SignupLayoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
+  '/signup/affiliate': typeof SignupAffiliateRoute
+  '/signup/client': typeof SignupClientRoute
+  '/signup/layout': typeof SignupLayoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signup/affiliate'
+    | '/signup/client'
+    | '/signup/layout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup'
-  id: '__root__' | '/' | '/login' | '/signup'
+  to: '/' | '/login' | '/signup/affiliate' | '/signup/client' | '/signup/layout'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/signup/affiliate'
+    | '/signup/client'
+    | '/signup/layout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
+  SignupAffiliateRoute: typeof SignupAffiliateRoute
+  SignupClientRoute: typeof SignupClientRoute
+  SignupLayoutRoute: typeof SignupLayoutRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -82,13 +106,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup/layout': {
+      id: '/signup/layout'
+      path: '/signup/layout'
+      fullPath: '/signup/layout'
+      preLoaderRoute: typeof SignupLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup/client': {
+      id: '/signup/client'
+      path: '/signup/client'
+      fullPath: '/signup/client'
+      preLoaderRoute: typeof SignupClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup/affiliate': {
+      id: '/signup/affiliate'
+      path: '/signup/affiliate'
+      fullPath: '/signup/affiliate'
+      preLoaderRoute: typeof SignupAffiliateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
+  SignupAffiliateRoute: SignupAffiliateRoute,
+  SignupClientRoute: SignupClientRoute,
+  SignupLayoutRoute: SignupLayoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
