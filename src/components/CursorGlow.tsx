@@ -19,9 +19,9 @@ export default function CursorGlow() {
         style={{
           left: pos.x,
           top: pos.y,
-          width: 400,
-          height: 400,
-          background: "radial-gradient(circle, oklch(0.78 0.08 260 / 12%) 0%, oklch(0.78 0.08 260 / 4%) 40%, transparent 70%)",
+          width: 600,
+          height: 600,
+          background: "radial-gradient(circle, oklch(0.78 0.08 260 / 25%) 0%, oklch(0.78 0.08 260 / 10%) 35%, oklch(0.78 0.08 260 / 3%) 60%, transparent 75%)",
         }}
       />
     </div>
