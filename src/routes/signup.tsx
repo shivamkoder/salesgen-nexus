@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import signupHero from "@/assets/signup-hero.jpg";
 
-export const Route = createFileRoute("/signup/layout")({
+export const Route = createFileRoute("/signup")({
   component: SignupPage,
   head: () => ({
     meta: [
