@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff, ArrowLeft, Zap } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { createClient } from "@/integrations/supabase/client";
 import signupHero from "@/assets/signup-hero.jpg";
 
 export const Route = createFileRoute("/signup/affiliate")({
@@ -19,9 +20,70 @@ export const Route = createFileRoute("/signup/affiliate")({
 });
 
 function AffiliateSignupPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [experienceLevel, setExperienceLevel] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    phone: "",
+    expertise: "",
+    portfolioUrl: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+    setLoading(true);
+
+    try {
+      const supabase = createClient();
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
+      const { data, error: signupError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            role: "affiliate",
+            full_name: fullName,
+            username: formData.username,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (signupError) {
+        setError(signupError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data?.user) {
+        setSuccessMessage("Account created successfully! Redirecting to login...");
+        setTimeout(() => {
+          navigate({ to: "/login" });
+        }, 2000);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -78,30 +140,53 @@ function AffiliateSignupPage() {
             </Link>
           </p>
 
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              // Form submission logic here
-              console.log("Affiliate signup submitted");
-            }}
-          >
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 text-sm">
+              {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 text-sm">
+              {successMessage}
+            </div>
+          )}
+
+          <form className="space-y-4" onSubmit={handleSignup}>
             <div className="grid grid-cols-2 gap-3">
               <Input
                 placeholder="First Name"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
                 required
                 className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
               />
               <Input
                 placeholder="Last Name"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
                 required
                 className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
               />
             </div>
 
             <Input
+              placeholder="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+              className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
+            />
+
+            <Input
               type="email"
               placeholder="Email Address"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               required
               className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
             />
@@ -109,6 +194,9 @@ function AffiliateSignupPage() {
             <Input
               type="tel"
               placeholder="Phone Number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
               required
               className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
             />
@@ -126,6 +214,9 @@ function AffiliateSignupPage() {
 
             <Textarea
               placeholder="Area of Expertise (e.g., SaaS, E-commerce, B2B Sales)"
+              name="expertise"
+              value={formData.expertise}
+              onChange={handleInputChange}
               required
               className="bg-secondary/50 border-border/60 min-h-[80px] placeholder:text-muted-foreground resize-none"
             />
@@ -133,6 +224,9 @@ function AffiliateSignupPage() {
             <Input
               type="url"
               placeholder="LinkedIn or Portfolio URL (optional)"
+              name="portfolioUrl"
+              value={formData.portfolioUrl}
+              onChange={handleInputChange}
               className="bg-secondary/50 border-border/60 h-11 placeholder:text-muted-foreground"
             />
 
@@ -140,6 +234,9 @@ function AffiliateSignupPage() {
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create Password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 required
                 className="bg-secondary/50 border-border/60 h-11 pr-10 placeholder:text-muted-foreground"
               />
@@ -169,10 +266,10 @@ function AffiliateSignupPage() {
 
             <Button
               type="submit"
-              disabled={!agreed}
+              disabled={!agreed || loading}
               className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Affiliate Account
+              {loading ? "Creating Account..." : "Create Affiliate Account"}
             </Button>
           </form>
 
