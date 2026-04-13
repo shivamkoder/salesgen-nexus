@@ -1,16 +1,28 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, isLoading, signOut } = useAuth();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out");
+    } catch {
+      toast.error("Sign out failed");
+    }
+  };
 
   return (
     <nav
@@ -44,18 +56,30 @@ export default function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <a
-            href="/login"
-            className="inline-flex items-center gap-2 rounded-full border border-border/40 px-5 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-surface-light hover:border-primary/30"
-          >
-            Log in
-          </a>
-          <a
-            href="#cta"
-            className="btn-glow inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all"
-          >
-            Get Started
-          </a>
+          {!isLoading && user ? (
+            <button
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-2 rounded-full border border-border/40 px-5 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-surface-light hover:border-primary/30"
+            >
+              <LogOut size={16} />
+              Log out
+            </button>
+          ) : (
+            <>
+              <a
+                href="/login"
+                className="inline-flex items-center gap-2 rounded-full border border-border/40 px-5 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-surface-light hover:border-primary/30"
+              >
+                Log in
+              </a>
+              <a
+                href="#cta"
+                className="btn-glow inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all"
+              >
+                Get Started
+              </a>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -70,8 +94,16 @@ export default function Navbar() {
           <a href="#mission" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Mission</a>
           <a href="#infrastructure" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Infrastructure</a>
           <a href="#vision" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Vision</a>
-          <a href="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full border border-border/40 px-6 py-3 font-medium text-foreground mt-2">Log in</a>
-          <a href="#cta" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground">Get Started</a>
+          {!isLoading && user ? (
+            <button onClick={() => { handleSignOut(); setOpen(false); }} className="inline-flex items-center justify-center gap-2 rounded-full border border-border/40 px-6 py-3 font-medium text-foreground mt-2">
+              <LogOut size={16} /> Log out
+            </button>
+          ) : (
+            <>
+              <a href="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full border border-border/40 px-6 py-3 font-medium text-foreground mt-2">Log in</a>
+              <a href="#cta" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground">Get Started</a>
+            </>
+          )}
         </div>
       )}
     </nav>
