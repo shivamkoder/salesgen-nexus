@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { createClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import signupHero from "@/assets/signup-hero.jpg";
 
 export const Route = createFileRoute("/signup/affiliate")({
@@ -51,7 +51,6 @@ function AffiliateSignupPage() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
       const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
       const { data, error: signupError } = await supabase.auth.signUp({

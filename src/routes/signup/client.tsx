@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import signupHero from "@/assets/signup-hero.jpg";
 
 export const Route = createFileRoute("/signup/client")({
@@ -48,8 +48,6 @@ function ClientSignupPage() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
-
       const { data, error: signupError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
