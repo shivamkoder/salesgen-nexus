@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -19,6 +20,11 @@ import { Route as SignupClientRouteImport } from './routes/signup/client'
 import { Route as SignupAffiliateRouteImport } from './routes/signup/affiliate'
 import { Route as DashboardAffiliateRouteImport } from './routes/dashboard/affiliate'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRouteWithChildren
+  '/terms': typeof TermsRoute
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/terms': typeof TermsRoute
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRouteWithChildren
+  '/terms': typeof TermsRoute
   '/dashboard/affiliate': typeof DashboardAffiliateRoute
   '/signup/affiliate': typeof SignupAffiliateRoute
   '/signup/client': typeof SignupClientRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/signup'
+    | '/terms'
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/login'
+    | '/terms'
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/signup'
+    | '/terms'
     | '/dashboard/affiliate'
     | '/signup/affiliate'
     | '/signup/client'
@@ -139,11 +151,19 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRouteWithChildren
+  TermsRoute: typeof TermsRoute
   DashboardAffiliateRoute: typeof DashboardAffiliateRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -231,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRouteWithChildren,
+  TermsRoute: TermsRoute,
   DashboardAffiliateRoute: DashboardAffiliateRoute,
 }
 export const routeTree = rootRouteImport

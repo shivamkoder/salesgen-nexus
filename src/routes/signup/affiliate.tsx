@@ -257,9 +257,9 @@ function AffiliateSignupPage() {
               />
               <label htmlFor="terms-affiliate" className="text-sm text-muted-foreground cursor-pointer">
                 I agree to the{" "}
-                <span className="text-primary hover:underline cursor-pointer">
+                <Link to="/terms" target="_blank" className="text-primary hover:underline">
                   Terms & Conditions
-                </span>
+                </Link>
               </label>
             </div>
 
