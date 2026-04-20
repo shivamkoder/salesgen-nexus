@@ -46,12 +46,26 @@ export default function Navbar() {
           {["Mission", "Infrastructure", "Vision"].map((label) => (
             <a
               key={label}
-              href={`#${label.toLowerCase()}`}
+              href={`/#${label.toLowerCase()}`}
               className="relative py-1 hover:text-foreground transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
             >
               {label}
             </a>
           ))}
+          <Link
+            to="/about"
+            className="relative py-1 hover:text-foreground transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            activeProps={{ className: "text-foreground" }}
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="relative py-1 hover:text-foreground transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            activeProps={{ className: "text-foreground" }}
+          >
+            Contact
+          </Link>
         </div>
 
         {/* CTA */}
@@ -91,9 +105,11 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden glass-strong px-6 pb-6 flex flex-col gap-4 text-sm text-muted-foreground border-t border-border/30">
-          <a href="#mission" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Mission</a>
-          <a href="#infrastructure" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Infrastructure</a>
-          <a href="#vision" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Vision</a>
+          <a href="/#mission" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Mission</a>
+          <a href="/#infrastructure" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Infrastructure</a>
+          <a href="/#vision" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Vision</a>
+          <Link to="/about" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">About</Link>
+          <Link to="/contact" onClick={() => setOpen(false)} className="py-2 hover:text-foreground transition-colors">Contact</Link>
           {!isLoading && user ? (
             <button onClick={() => { handleSignOut(); setOpen(false); }} className="inline-flex items-center justify-center gap-2 rounded-full border border-border/40 px-6 py-3 font-medium text-foreground mt-2">
               <LogOut size={16} /> Log out
