@@ -1,87 +1,57 @@
 
 
-# Supabase Authentication Setup for SalesGen
+# Add About Us, Contact pages + Footer with copyright
 
-## Current State
-- Signup (`/signup`) and Login (`/login`) pages exist with full UI but no backend logic
-- No Supabase client library is installed
-- No auth integration files exist yet
-- You confirmed: no profile table needed, just basic auth
+## What will be built
 
-## What I Will Build
+### 1. New route: `/about` (`src/routes/about.tsx`)
+A dedicated About Us page with the same dark futuristic aesthetic (uses `Navbar`, `Footer`, `CursorGlow`):
+- Hero band: "About SalesGen" with tagline
+- "Our Story" section — origins of the platform
+- "Mission & Values" — 3-card grid (Performance, Transparency, Global Reach) using existing glass/glow styling
+- "By the Numbers" — stats row (Affiliates, Countries, Commission paid, Platform fee 5%)
+- Per-route SEO `head()` with unique title, description, og:title, og:description
 
-### 1. Install Supabase client library
-Add `@supabase/supabase-js` as a dependency.
+### 2. New route: `/contact` (`src/routes/contact.tsx`)
+Contact details + a simple contact form (UI only, no backend wiring this turn):
+- Heading + intro copy
+- Contact info cards: Email (`hello@salesgen.com`), Support (`support@salesgen.com`), Business hours, HQ address placeholder
+- Social links row (LinkedIn, X/Twitter, GitHub) using `lucide-react` icons
+- Contact form: Name, Email, Subject, Message with Send button (toast success on submit, no API call)
+- Per-route SEO `head()`
 
-### 2. Create Supabase client file
-Create `src/integrations/supabase/client.ts` that initializes the Supabase browser client using `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` environment variables (these should already be available from your Vercel-Supabase integration).
+### 3. Expanded `Footer.tsx` (replaces current minimal footer)
+4-column layout on desktop, stacked on mobile, with bottom "All rights reserved" bar:
+- **Brand column**: SALESGEN logo + short tagline + social icons
+- **Product**: Mission, Infrastructure, Vision (hash links to `/`)
+- **Company**: About (`/about`), Contact (`/contact`), Careers (placeholder `#`)
+- **Legal**: Privacy, Terms, Cookies (placeholders `#`)
+- Divider
+- Bottom bar: `© {year} SalesGen. All rights reserved.` on the left, "Built for the future of affiliate performance" on the right
+- Keep existing top gradient line + dark theme
 
-### 3. Create auth helper hooks
-Create `src/hooks/use-auth.ts` with:
-- `useAuth()` hook that tracks the current user session via `onAuthStateChange`
-- Exposes `user`, `session`, `isLoading`, `signUp`, `signIn`, `signOut`
+### 4. Navbar update (`src/components/Navbar.tsx`)
+Add **About** and **Contact** as `<Link>` items in the desktop nav (alongside Mission/Infrastructure/Vision) and in the mobile menu, so the new pages are reachable from every page.
 
-### 4. Wire up the Signup page (`/signup/index.tsx`)
-- Add controlled state for all form fields (first name, last name, email, password)
-- On submit: call `supabase.auth.signUp({ email, password })` with `emailRedirectTo`
-- Show loading state on the button, display error/success toast messages
-- Disable submit until terms checkbox is agreed
-
-### 5. Wire up the Login page (`/login.tsx`)
-- Add controlled state for email and password
-- On submit: call `supabase.auth.signInWithPassword({ email, password })`
-- Show loading/error feedback
-- On success: redirect to `/` (or a future dashboard)
-
-### 6. Update Navbar with auth-aware state
-- Show "Log out" button when user is signed in, "Log in / Get Started" when not
-- Use the `useAuth` hook
-
-### 7. Add toast notifications
-Install `sonner` (already likely available via the existing Sonner component) for success/error feedback on auth actions.
-
----
-
-## Technical Details
-
-**Supabase client setup:**
-```typescript
-// src/integrations/supabase/client.ts
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-
-export const supabase = createClient(supabaseUrl, supabaseKey)
+### 5. Fix existing build errors
+`src/routes/signup/affiliate.tsx` and `src/routes/signup/client.tsx` currently do:
+```ts
+import { createClient } from "@/integrations/supabase/client";
 ```
-
-**Auth hook pattern:**
-```typescript
-// src/hooks/use-auth.ts
-// Uses onAuthStateChange listener (set up BEFORE getSession)
-// Returns { user, session, isLoading, signUp, signIn, signOut }
+But the client file only exports `supabase`. Fix by changing both imports to:
+```ts
+import { supabase } from "@/integrations/supabase/client";
 ```
+and replacing any `const supabase = createClient()` calls inside those files with direct use of the imported `supabase` instance.
 
-**Signup call:**
-```typescript
-await supabase.auth.signUp({
-  email,
-  password,
-  options: { emailRedirectTo: window.location.origin }
-})
-```
+## Technical notes
+- All new routes use `createFileRoute` with the flat naming convention (`about.tsx`, `contact.tsx`) — TanStack Router auto-generates `routeTree.gen.ts`, no manual edit.
+- Each route renders `<Navbar />` + page content + `<Footer />` + `<CursorGlow />` to match the index page shell.
+- Reuse existing design tokens: `glass`, `glow-border`, `text-gradient`, `bg-dot-grid`, `font-heading`, primary `oklch` accent.
+- Contact form uses local `useState` + `sonner` toast (already used in Navbar) — no Supabase write this turn.
+- No new dependencies required.
 
-**Login call:**
-```typescript
-await supabase.auth.signInWithPassword({ email, password })
-```
-
-**Files to create:**
-- `src/integrations/supabase/client.ts`
-- `src/hooks/use-auth.ts`
-
-**Files to modify:**
-- `src/routes/signup/index.tsx` (wire form to signUp)
-- `src/routes/login.tsx` (wire form to signIn)
-- `src/components/Navbar.tsx` (auth-aware buttons)
+## Files
+**Create**: `src/routes/about.tsx`, `src/routes/contact.tsx`
+**Modify**: `src/components/Footer.tsx`, `src/components/Navbar.tsx`, `src/routes/signup/affiliate.tsx`, `src/routes/signup/client.tsx`
 
